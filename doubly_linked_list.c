@@ -59,6 +59,69 @@ void reverse_list_print(Node **head){
 	}
 }
 
+void remove_element_position(Node ** head, int position)
+{
+	Node * old_list = NULL;
+	Node *temp_list = *head;
+
+	for(int idx =0; idx < position; idx++)
+	{
+		old_list = temp_list;
+		temp_list = temp_list->next;
+	}
+
+	old_list->next = temp_list->next;
+        temp_list->next->prev = old_list;
+	free(temp_list);
+}
+
+void remove_element_at_end(Node ** head)
+{
+	Node *temp_list = *head;
+
+	while(temp_list->next->next != NULL)
+	{
+		temp_list = temp_list->next;
+	}
+        
+	free(temp_list->next);
+	temp_list->next = NULL;
+}
+
+void remove_element_by_value(Node ** head, int value)
+{
+	Node *temp_list = *head;
+	Node * prev = NULL;
+
+	if(*head == NULL){
+		printf("There is no elements in linkedi list ! \n");
+		return;
+	}
+
+	while(temp_list != NULL)
+	{
+		if(temp_list->data==value){
+			printf("temp->list->data %d \n", temp_list->data);
+			if(prev==NULL){
+			    *head=temp_list->next;
+			    free(temp_list);
+			    temp_list = *head;
+			}
+			else{
+				prev->next = temp_list->next;
+				temp_list->next->prev = prev->next;
+				free(temp_list);
+				temp_list = prev->next;
+			}
+		}
+		else{
+			prev= temp_list;
+			temp_list = temp_list->next;
+		}
+	}
+        
+}
+
 void reverse_list(Node ** head)
 {
 	if(*head ==NULL || (*head)->next == NULL) return;
@@ -92,6 +155,15 @@ int main(){
 	reverse_list(&data);
 	printf("print once again \n");
 	print_all_elements(&data);
+	remove_element_position(&data, 1);
+	print_all_elements(&data);
+	printf("remove eleemnt at the end\n");
+	remove_element_at_end(&data);
+	print_all_elements(&data);
+	printf("remove eleemnt at the end\n");
+	remove_element_at_end(&data);
+	print_all_elements(&data);
+        remove_element_by_value(&data, 99);
 	print_all_elements(&data);
 	return 0;
 }
