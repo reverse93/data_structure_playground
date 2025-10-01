@@ -1,0 +1,97 @@
+#include <stdio.h>
+
+typedef struct Node{
+	int data;
+        struct Node * next;
+	struct Node * prev;
+} Node;
+
+void create_head(Node ** head, int data){
+	(*head)->data=data;
+	(*head)->next=NULL;
+	(*head)->prev=NULL;
+}
+
+void add_element_to_list(Node ** head, int data)
+{
+	Node * node = (Node *)malloc(sizeof(Node));
+	node->data = data;
+	node->next = NULL;
+	node->prev=NULL;
+
+	Node *temp = *head;
+	while(temp->next != NULL){
+		temp = temp->next;
+	}
+	temp->next = node;
+	node->prev = temp;
+}
+
+void add_element_begin(Node ** head, int data)
+{
+	Node * node = (Node *)malloc(sizeof(Node));
+	node->data = data;
+	node->next = *head;
+	node->prev=NULL;
+	if(*head!=NULL){
+		(*head)->prev = node;
+	}
+
+	*head=node;
+}
+
+void print_all_elements(Node ** head){
+	Node *temp = *head;
+	while(temp != NULL){
+		printf("%d \n", temp->data);
+		temp = temp->next;
+	}
+}
+void reverse_list_print(Node **head){
+	Node *temp = *head;
+	while(temp->next !=NULL){
+		temp = temp->next;
+	}
+	Node *rev_temp = temp;
+	while(rev_temp != NULL){
+		printf("%d \n", rev_temp->data);
+		rev_temp = rev_temp->prev;
+	}
+}
+
+void reverse_list(Node ** head)
+{
+	if(*head ==NULL || (*head)->next == NULL) return;
+	Node * temp_node = *head;
+	Node * prevNode = NULL;
+        Node * currNode = temp_node;
+
+	while(currNode != NULL){
+		prevNode = currNode->prev;
+		currNode->prev = currNode->next;
+		currNode->next = prevNode;
+
+		currNode = currNode->prev;
+	}
+	if(prevNode != NULL){
+	  *head = prevNode->prev;
+	}
+}
+
+int main(){
+	Node * data = (Node*)malloc(sizeof(Node));
+	create_head(&data, 10);
+	add_element_to_list(&data, 99);
+	add_element_begin(&data, 34); 
+	add_element_begin(&data, 34); 
+	add_element_begin(&data, 34); 
+	add_element_begin(&data, 34); 
+	print_all_elements(&data);
+	printf("print reverse elements \n");
+	reverse_list_print(&data);
+	reverse_list(&data);
+	printf("print once again \n");
+	print_all_elements(&data);
+	print_all_elements(&data);
+	return 0;
+}
